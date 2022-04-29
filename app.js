@@ -37,7 +37,6 @@ function startGame() {
     })
     setBoardHoverClass();
     winningMessageElement.classList.remove('show');
-
 }
 
 function handleClick(e) {
