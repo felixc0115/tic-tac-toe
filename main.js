@@ -7,6 +7,8 @@ const playerTwo = players("brenda", "O");
 
 const displayController = (() => {
   let playerOneTurn = true;
+  let isGameOver = false;
+
   const decidePlayerSymbol = () => {
     if (playerOneTurn) {
       return playerOne.symbol;
@@ -18,7 +20,65 @@ const displayController = (() => {
   const switchTurns = () => {
     playerOneTurn = !playerOneTurn;
   };
-  return { decidePlayerSymbol, switchTurns };
+
+  const checkWinner = (gameboard, symbol) => {
+    const winCases = [
+      // horizontal
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+
+      // vertical
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+
+      // diagonal
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    let isWinner = winCases.some((winCase) => {
+      return winCase.every((gameSpace) => {
+        return gameboard[gameSpace] === symbol;
+      });
+    });
+
+    if (isWinner) {
+      isGameOver = true;
+      endGame();
+    }
+  };
+
+  const startGame = () => {
+    gameboardObj.renderBoard();
+  };
+
+  const endGame = (player) => {
+    const gameResultDisplay = document.querySelector(".game-result-display");
+    gameResultDisplay.textContent = `someone has won`;
+  };
+
+  const resetGame = () => {
+    const allGameSpaces = document.querySelectorAll(".game-space");
+    allGameSpaces.forEach((gameSpace) => {
+      gameSpace.textContent = "";
+      gameSpace.classList.remove("disable-space");
+    });
+    gameboardObj.gameboard.fill("");
+  };
+
+  const resetButton = document.querySelector("#reset-btn");
+  resetButton.addEventListener("click", resetGame);
+
+  return {
+    decidePlayerSymbol,
+    switchTurns,
+    checkWinner,
+    endGame,
+    resetGame,
+    startGame,
+  };
 })();
 
 const gameboardObj = (() => {
@@ -30,7 +90,12 @@ const gameboardObj = (() => {
       gameSpace.addEventListener("click", (event) => {
         event.target.textContent = displayController.decidePlayerSymbol();
         gameboardObj.gameboard[index] = displayController.decidePlayerSymbol();
+        displayController.checkWinner(
+          gameboardObj.gameboard,
+          displayController.decidePlayerSymbol()
+        );
         displayController.switchTurns();
+        gameSpace.classList.add("disable-space");
       })
     );
   };
@@ -39,8 +104,6 @@ const gameboardObj = (() => {
 })();
 
 gameboardObj.renderBoard();
-
-console.log(gameboardObj.gameboard);
 
 /*
  - track players turn 

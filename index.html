@@ -8,17 +8,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <h1>Tic-Tac-Toe</h1>
     <div class="main-container">
-      <div class="input-container">
-        <label for="player-one-name">Player One Name: </label>
-        <input id="player-one-name" type="text" required />
-        <label for="player-two-name">Player Two Name: </label>
-        <input id="player-two-name" type="text" required />
-      </div>
-      <div class="button-container">
-        <button>Start Game</button>
-        <button>Reset Game</button>
-      </div>
       <div class="gameboard">
         <div class="game-space"></div>
         <div class="game-space"></div>
@@ -30,6 +21,10 @@
         <div class="game-space"></div>
         <div class="game-space"></div>
       </div>
+      <div class="game-result-display"></div>
+    </div>
+    <div class="button-container">
+      <button id="reset-btn">Reset Game</button>
     </div>
     <script src="main.js"></script>
   </body>
