@@ -7,7 +7,6 @@ const playerTwo = players("brenda", "O");
 
 const displayController = (() => {
   let playerOneTurn = true;
-  let isGameOver = false;
 
   const decidePlayerSymbol = () => {
     if (playerOneTurn) {
@@ -45,7 +44,13 @@ const displayController = (() => {
     });
 
     if (isWinner) {
-      isGameOver = true;
+      endGame(symbol);
+    }
+
+    if (
+      isWinner === false &&
+      gameboardObj.gameboard.find((gameSpace) => gameSpace === " ") === false
+    ) {
       endGame();
     }
   };
@@ -54,9 +59,17 @@ const displayController = (() => {
     gameboardObj.renderBoard();
   };
 
-  const endGame = (player) => {
+  const endGame = (symbol) => {
     const gameResultDisplay = document.querySelector(".game-result-display");
-    gameResultDisplay.textContent = `someone has won`;
+    const allGameSpaces = document.querySelectorAll(".game-space");
+    gameResultDisplay.textContent = gameboardObj.gameboard.find(
+      (gameSpace) => gameSpace === " "
+    )
+      ? `${symbol} won`
+      : "It is a tie";
+    allGameSpaces.forEach((gameSpace) =>
+      gameSpace.classList.add("disable-space")
+    );
   };
 
   const resetGame = () => {
@@ -65,7 +78,9 @@ const displayController = (() => {
       gameSpace.textContent = "";
       gameSpace.classList.remove("disable-space");
     });
-    gameboardObj.gameboard.fill("");
+    gameboardObj.gameboard.fill(" ");
+    const gameResultDisplay = document.querySelector(".game-result-display");
+    gameResultDisplay.textContent = "";
   };
 
   const resetButton = document.querySelector("#reset-btn");
